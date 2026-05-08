@@ -1,0 +1,14 @@
+[35m[1mConsolidate compiler generated dependencies of target mpu6050_node[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/mpu6050_node.dir/src/mpu6050_driver.cpp.o[0m
+[100%] [32m[1mLinking CXX executable mpu6050_node[0m
+/usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/11/../../../aarch64-linux-gnu/Scrt1.o: in function `_start':
+(.text+0x1c): undefined reference to `main'
+/usr/bin/ld: (.text+0x20): undefined reference to `main'
+/usr/bin/ld: CMakeFiles/mpu6050_node.dir/src/mpu6050_driver.cpp.o: in function `MPU6050Driver::MPU6050Driver()':
+mpu6050_driver.cpp:(.text+0x220): undefined reference to `MPU6050Driver::init_mpu6050()'
+/usr/bin/ld: mpu6050_driver.cpp:(.text+0x288): undefined reference to `MPU6050Driver::timer_callback()'
+/usr/bin/ld: mpu6050_driver.cpp:(.text+0x28c): undefined reference to `MPU6050Driver::timer_callback()'
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/mpu6050_node.dir/build.make:175: mpu6050_node] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/mpu6050_node.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

@@ -1,0 +1,3 @@
+[35m[1mConsolidate compiler generated dependencies of target mpu6050_node[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/mpu6050_node.dir/src/mpu6050_driver.cpp.o[0m
+[100%] [32m[1mLinking CXX executable mpu6050_node[0m

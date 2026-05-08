@@ -1,0 +1,22 @@
+[35m[1mConsolidate compiler generated dependencies of target mpu6050_node[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/mpu6050_node.dir/src/mpu6050_driver.cpp.o[0m
+[100%] [32m[1mLinking CXX executable mpu6050_node[0m
+[100%] Built target mpu6050_node
+-- Install configuration: ""
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/lib/mpu6050_driver/mpu6050_node
+-- Set runtime path of "/home/kusbeoms/ros2_ws/install/mpu6050_driver/lib/mpu6050_driver/mpu6050_node" to ""
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/ament_index/resource_index/package_run_dependencies/mpu6050_driver
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/ament_index/resource_index/parent_prefix_path/mpu6050_driver
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/environment/ament_prefix_path.sh
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/environment/ament_prefix_path.dsv
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/environment/path.sh
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/environment/path.dsv
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/local_setup.bash
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/local_setup.sh
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/local_setup.zsh
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/local_setup.dsv
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/package.dsv
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/ament_index/resource_index/packages/mpu6050_driver
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/cmake/mpu6050_driverConfig.cmake
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/cmake/mpu6050_driverConfig-version.cmake
+-- Installing: /home/kusbeoms/ros2_ws/install/mpu6050_driver/share/mpu6050_driver/package.xml

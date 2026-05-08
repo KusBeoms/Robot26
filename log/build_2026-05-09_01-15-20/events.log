@@ -1,0 +1,211 @@
+[0.000000] (-) TimerEvent: {}
+[0.001783] (mpu6050_driver) JobQueued: {'identifier': 'mpu6050_driver', 'dependencies': OrderedDict()}
+[0.002454] (mpu6050_driver) JobStarted: {'identifier': 'mpu6050_driver'}
+[0.040576] (mpu6050_driver) JobProgress: {'identifier': 'mpu6050_driver', 'progress': 'cmake'}
+[0.043785] (mpu6050_driver) JobProgress: {'identifier': 'mpu6050_driver', 'progress': 'build'}
+[0.047315] (mpu6050_driver) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/kusbeoms/ros2_ws/build/mpu6050_driver', '--', '-j4', '-l4'], 'cwd': '/home/kusbeoms/ros2_ws/build/mpu6050_driver', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'kusbeoms'), ('SSH_CLIENT', '192.168.45.238 5951 22'), ('LC_TIME', 'ko_KR.UTF-8'), ('XDG_SESSION_TYPE', 'tty'), ('GIT_ASKPASS', '/home/kusbeoms/.vscode-server/cli/servers/Stable-034f571df509819cc10b0c8129f66ef77a542f0e/server/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib'), ('BROWSER', '/home/kusbeoms/.vscode-server/cli/servers/Stable-034f571df509819cc10b0c8129f66ef77a542f0e/server/bin/helpers/browser.sh'), ('MOTD_SHOWN', 'pam'), ('HOME', '/home/kusbeoms'), ('OLDPWD', '/home/kusbeoms/ros2_ws'), ('TERM_PROGRAM_VERSION', '1.118.1'), ('VSCODE_IPC_HOOK_CLI', '/run/user/1000/vscode-ipc-69330793-9c48-48b3-94f5-6752a3bbecdc.sock'), ('ROS_PYTHON_VERSION', '3'), ('VSCODE_GIT_ASKPASS_MAIN', '/home/kusbeoms/.vscode-server/cli/servers/Stable-034f571df509819cc10b0c8129f66ef77a542f0e/server/extensions/git/dist/askpass-main.js'), ('LC_MONETARY', 'ko_KR.UTF-8'), ('VSCODE_GIT_ASKPASS_NODE', '/home/kusbeoms/.vscode-server/cli/servers/Stable-034f571df509819cc10b0c8129f66ef77a542f0e/server/node'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'kusbeoms'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('XDG_SESSION_ID', '3'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/kusbeoms/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/home/kusbeoms/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/home/kusbeoms/.vscode-server/cli/servers/Stable-034f571df509819cc10b0c8129f66ef77a542f0e/server/bin/remote-cli:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'), ('LC_ADDRESS', 'ko_KR.UTF-8'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('LANG', 'en_US.UTF-8'), ('LC_TELEPHONE', 'ko_KR.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-f5f62dd72c.sock'), ('TERM_PROGRAM', 'vscode'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('LC_NAME', 'ko_KR.UTF-8'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'ko_KR.UTF-8'), ('LC_IDENTIFICATION', 'ko_KR.UTF-8'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('PWD', '/home/kusbeoms/ros2_ws/build/mpu6050_driver'), ('LC_ALL', 'en_US.UTF-8'), ('SSH_CONNECTION', '192.168.45.238 5951 192.168.45.92 22'), ('XDG_DATA_DIRS', '/usr/share/gnome:/usr/local/share:/usr/share:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'ko_KR.UTF-8'), ('LC_PAPER', 'ko_KR.UTF-8'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.098931] (-) TimerEvent: {}
+[0.199816] (-) TimerEvent: {}
+[0.239177] (mpu6050_driver) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target mpu6050_node\x1b[0m\n'}
+[0.300002] (-) TimerEvent: {}
+[0.341271] (mpu6050_driver) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/mpu6050_node.dir/src/mpu6050_driver.cpp.o\x1b[0m\n'}
+[0.400250] (-) TimerEvent: {}
+[0.500999] (-) TimerEvent: {}
+[0.601776] (-) TimerEvent: {}
+[0.702576] (-) TimerEvent: {}
+[0.803402] (-) TimerEvent: {}
+[0.904271] (-) TimerEvent: {}
+[1.005086] (-) TimerEvent: {}
+[1.105919] (-) TimerEvent: {}
+[1.206733] (-) TimerEvent: {}
+[1.307541] (-) TimerEvent: {}
+[1.408302] (-) TimerEvent: {}
+[1.509107] (-) TimerEvent: {}
+[1.609907] (-) TimerEvent: {}
+[1.710717] (-) TimerEvent: {}
+[1.811506] (-) TimerEvent: {}
+[1.912285] (-) TimerEvent: {}
+[2.013119] (-) TimerEvent: {}
+[2.114011] (-) TimerEvent: {}
+[2.214893] (-) TimerEvent: {}
+[2.315869] (-) TimerEvent: {}
+[2.416927] (-) TimerEvent: {}
+[2.517859] (-) TimerEvent: {}
+[2.618892] (-) TimerEvent: {}
+[2.719828] (-) TimerEvent: {}
+[2.820704] (-) TimerEvent: {}
+[2.921706] (-) TimerEvent: {}
+[3.022715] (-) TimerEvent: {}
+[3.123654] (-) TimerEvent: {}
+[3.224578] (-) TimerEvent: {}
+[3.325439] (-) TimerEvent: {}
+[3.426352] (-) TimerEvent: {}
+[3.527288] (-) TimerEvent: {}
+[3.628201] (-) TimerEvent: {}
+[3.729152] (-) TimerEvent: {}
+[3.830353] (-) TimerEvent: {}
+[3.931540] (-) TimerEvent: {}
+[4.032402] (-) TimerEvent: {}
+[4.133272] (-) TimerEvent: {}
+[4.234275] (-) TimerEvent: {}
+[4.335286] (-) TimerEvent: {}
+[4.436174] (-) TimerEvent: {}
+[4.537160] (-) TimerEvent: {}
+[4.637982] (-) TimerEvent: {}
+[4.738937] (-) TimerEvent: {}
+[4.839849] (-) TimerEvent: {}
+[4.940991] (-) TimerEvent: {}
+[5.041929] (-) TimerEvent: {}
+[5.142864] (-) TimerEvent: {}
+[5.243816] (-) TimerEvent: {}
+[5.344783] (-) TimerEvent: {}
+[5.445711] (-) TimerEvent: {}
+[5.546650] (-) TimerEvent: {}
+[5.647541] (-) TimerEvent: {}
+[5.748484] (-) TimerEvent: {}
+[5.849385] (-) TimerEvent: {}
+[5.950270] (-) TimerEvent: {}
+[6.051173] (-) TimerEvent: {}
+[6.152106] (-) TimerEvent: {}
+[6.253052] (-) TimerEvent: {}
+[6.353921] (-) TimerEvent: {}
+[6.454850] (-) TimerEvent: {}
+[6.555769] (-) TimerEvent: {}
+[6.656649] (-) TimerEvent: {}
+[6.757487] (-) TimerEvent: {}
+[6.858384] (-) TimerEvent: {}
+[6.959379] (-) TimerEvent: {}
+[7.060295] (-) TimerEvent: {}
+[7.161183] (-) TimerEvent: {}
+[7.262073] (-) TimerEvent: {}
+[7.362970] (-) TimerEvent: {}
+[7.463948] (-) TimerEvent: {}
+[7.564885] (-) TimerEvent: {}
+[7.665761] (-) TimerEvent: {}
+[7.766690] (-) TimerEvent: {}
+[7.867576] (-) TimerEvent: {}
+[7.968508] (-) TimerEvent: {}
+[8.069416] (-) TimerEvent: {}
+[8.170294] (-) TimerEvent: {}
+[8.271283] (-) TimerEvent: {}
+[8.372178] (-) TimerEvent: {}
+[8.473088] (-) TimerEvent: {}
+[8.573992] (-) TimerEvent: {}
+[8.674989] (-) TimerEvent: {}
+[8.775884] (-) TimerEvent: {}
+[8.876917] (-) TimerEvent: {}
+[8.978087] (-) TimerEvent: {}
+[9.078998] (-) TimerEvent: {}
+[9.179904] (-) TimerEvent: {}
+[9.280786] (-) TimerEvent: {}
+[9.381723] (-) TimerEvent: {}
+[9.482688] (-) TimerEvent: {}
+[9.583576] (-) TimerEvent: {}
+[9.684465] (-) TimerEvent: {}
+[9.785443] (-) TimerEvent: {}
+[9.886435] (-) TimerEvent: {}
+[9.987597] (-) TimerEvent: {}
+[10.088528] (-) TimerEvent: {}
+[10.189506] (-) TimerEvent: {}
+[10.290402] (-) TimerEvent: {}
+[10.391338] (-) TimerEvent: {}
+[10.492176] (-) TimerEvent: {}
+[10.593123] (-) TimerEvent: {}
+[10.694003] (-) TimerEvent: {}
+[10.794926] (-) TimerEvent: {}
+[10.895783] (-) TimerEvent: {}
+[10.996735] (-) TimerEvent: {}
+[11.097646] (-) TimerEvent: {}
+[11.198607] (-) TimerEvent: {}
+[11.299484] (-) TimerEvent: {}
+[11.400379] (-) TimerEvent: {}
+[11.501298] (-) TimerEvent: {}
+[11.602202] (-) TimerEvent: {}
+[11.703137] (-) TimerEvent: {}
+[11.804064] (-) TimerEvent: {}
+[11.904961] (-) TimerEvent: {}
+[12.005857] (-) TimerEvent: {}
+[12.106721] (-) TimerEvent: {}
+[12.207621] (-) TimerEvent: {}
+[12.308507] (-) TimerEvent: {}
+[12.409401] (-) TimerEvent: {}
+[12.510408] (-) TimerEvent: {}
+[12.611393] (-) TimerEvent: {}
+[12.712274] (-) TimerEvent: {}
+[12.813173] (-) TimerEvent: {}
+[12.914101] (-) TimerEvent: {}
+[13.015004] (-) TimerEvent: {}
+[13.115886] (-) TimerEvent: {}
+[13.216811] (-) TimerEvent: {}
+[13.317783] (-) TimerEvent: {}
+[13.418970] (-) TimerEvent: {}
+[13.519806] (-) TimerEvent: {}
+[13.620697] (-) TimerEvent: {}
+[13.721691] (-) TimerEvent: {}
+[13.822820] (-) TimerEvent: {}
+[13.924276] (-) TimerEvent: {}
+[14.025161] (-) TimerEvent: {}
+[14.126211] (-) TimerEvent: {}
+[14.227116] (-) TimerEvent: {}
+[14.328111] (-) TimerEvent: {}
+[14.429002] (-) TimerEvent: {}
+[14.529856] (-) TimerEvent: {}
+[14.630774] (-) TimerEvent: {}
+[14.731645] (-) TimerEvent: {}
+[14.832565] (-) TimerEvent: {}
+[14.933455] (-) TimerEvent: {}
+[15.034298] (-) TimerEvent: {}
+[15.135228] (-) TimerEvent: {}
+[15.236118] (-) TimerEvent: {}
+[15.337037] (-) TimerEvent: {}
+[15.437936] (-) TimerEvent: {}
+[15.538859] (-) TimerEvent: {}
+[15.639750] (-) TimerEvent: {}
+[15.740607] (-) TimerEvent: {}
+[15.841445] (-) TimerEvent: {}
+[15.942609] (-) TimerEvent: {}
+[16.044421] (-) TimerEvent: {}
+[16.145291] (-) TimerEvent: {}
+[16.246185] (-) TimerEvent: {}
+[16.347185] (-) TimerEvent: {}
+[16.448432] (-) TimerEvent: {}
+[16.549817] (-) TimerEvent: {}
+[16.650738] (-) TimerEvent: {}
+[16.751729] (-) TimerEvent: {}
+[16.852592] (-) TimerEvent: {}
+[16.953539] (-) TimerEvent: {}
+[17.054724] (-) TimerEvent: {}
+[17.155569] (-) TimerEvent: {}
+[17.256422] (-) TimerEvent: {}
+[17.357243] (-) TimerEvent: {}
+[17.458096] (-) TimerEvent: {}
+[17.559254] (-) TimerEvent: {}
+[17.661693] (-) TimerEvent: {}
+[17.763141] (-) TimerEvent: {}
+[17.768426] (mpu6050_driver) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable mpu6050_node\x1b[0m\n'}
+[17.863409] (-) TimerEvent: {}
+[17.964443] (-) TimerEvent: {}
+[18.065464] (-) TimerEvent: {}
+[18.166496] (-) TimerEvent: {}
+[18.267516] (-) TimerEvent: {}
+[18.368778] (-) TimerEvent: {}
+[18.469846] (-) TimerEvent: {}
+[18.571318] (-) TimerEvent: {}
+[18.672285] (-) TimerEvent: {}
+[18.773122] (-) TimerEvent: {}
+[18.855557] (mpu6050_driver) StderrLine: {'line': b"/usr/bin/ld: /usr/lib/gcc/aarch64-linux-gnu/11/../../../aarch64-linux-gnu/Scrt1.o: in function `_start':\n"}
+[18.856397] (mpu6050_driver) StderrLine: {'line': b"(.text+0x1c): undefined reference to `main'\n"}
+[18.856990] (mpu6050_driver) StderrLine: {'line': b"/usr/bin/ld: (.text+0x20): undefined reference to `main'\n"}
+[18.865949] (mpu6050_driver) StderrLine: {'line': b"/usr/bin/ld: CMakeFiles/mpu6050_node.dir/src/mpu6050_driver.cpp.o: in function `MPU6050Driver::MPU6050Driver()':\n"}
+[18.867535] (mpu6050_driver) StderrLine: {'line': b"mpu6050_driver.cpp:(.text+0x220): undefined reference to `MPU6050Driver::init_mpu6050()'\n"}
+[18.868615] (mpu6050_driver) StderrLine: {'line': b"/usr/bin/ld: mpu6050_driver.cpp:(.text+0x288): undefined reference to `MPU6050Driver::timer_callback()'\n"}
+[18.869246] (mpu6050_driver) StderrLine: {'line': b"/usr/bin/ld: mpu6050_driver.cpp:(.text+0x28c): undefined reference to `MPU6050Driver::timer_callback()'\n"}
+[18.873289] (-) TimerEvent: {}
+[18.930942] (mpu6050_driver) StderrLine: {'line': b'collect2: error: ld returned 1 exit status\n'}
+[18.936614] (mpu6050_driver) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/mpu6050_node.dir/build.make:175: mpu6050_node] Error 1\n'}
+[18.937588] (mpu6050_driver) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/mpu6050_node.dir/all] Error 2\n'}
+[18.938936] (mpu6050_driver) StderrLine: {'line': b'gmake: *** [Makefile:146: all] Error 2\n'}
+[18.946745] (mpu6050_driver) CommandEnded: {'returncode': 2}
+[18.973783] (-) TimerEvent: {}
+[18.996812] (mpu6050_driver) JobEnded: {'identifier': 'mpu6050_driver', 'rc': 2}
+[19.009161] (-) EventReactorShutdown: {}

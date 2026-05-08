@@ -1,0 +1,7 @@
+[01m[K/home/kusbeoms/ros2_ws/src/mpu6050_driver/src/mpu6050_driver.cpp:[m[K In constructor ‘[01m[KMPU6050Driver::MPU6050Driver()[m[K’:
+[01m[K/home/kusbeoms/ros2_ws/src/mpu6050_driver/src/mpu6050_driver.cpp:19:66:[m[K [01;31m[Kerror: [m[K‘[01m[Ktimer_callback[m[K’ is not a member of ‘[01m[KMPU6050Driver[m[K’
+   19 |         std::chrono::milliseconds(10), std::bind(&MPU6050Driver::[01;31m[Ktimer_callback[m[K, this));
+      |                                                                  [01;31m[K^~~~~~~~~~~~~~[m[K
+gmake[2]: *** [CMakeFiles/mpu6050_node.dir/build.make:76: CMakeFiles/mpu6050_node.dir/src/mpu6050_driver.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/mpu6050_node.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

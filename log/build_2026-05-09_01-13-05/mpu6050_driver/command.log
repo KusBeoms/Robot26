@@ -1,0 +1,4 @@
+Invoking command in '/home/kusbeoms/ros2_ws/build/mpu6050_driver': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/kusbeoms/ros2_ws/src/mpu6050_driver -DCMAKE_INSTALL_PREFIX=/home/kusbeoms/ros2_ws/install/mpu6050_driver
+Invoked command in '/home/kusbeoms/ros2_ws/build/mpu6050_driver' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/kusbeoms/ros2_ws/src/mpu6050_driver -DCMAKE_INSTALL_PREFIX=/home/kusbeoms/ros2_ws/install/mpu6050_driver
+Invoking command in '/home/kusbeoms/ros2_ws/build/mpu6050_driver': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/kusbeoms/ros2_ws/build/mpu6050_driver -- -j4 -l4
+Invoked command in '/home/kusbeoms/ros2_ws/build/mpu6050_driver' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/kusbeoms/ros2_ws/build/mpu6050_driver -- -j4 -l4
