@@ -47,8 +47,11 @@ log = logging.getLogger("robot_node")
 # ──────────────────────────────────────────────
 # 상수
 # ──────────────────────────────────────────────
-I2C_BUS      = 1        # 라즈베리파이 기본 I2C 버스
-RESPONSE_LEN = 20       # requestEvent() 응답 바이트 수
+I2C_BUS        = 1        # 라즈베리파이 기본 I2C 버스
+RESPONSE_LEN   = 20       # requestEvent() 응답 바이트 수
+STEP_TOLERANCE = 15       # 도달 판정 허용 오차 (steps, ≈3.6°)
+DELAY_WARN_MS  = 500.0    # 이 초과 시 안전 정지 트리거
+DELAY_LOG_MAX  = 200      # 딜레이 로그 최대 보관 수
 
 LEG_ADDR: Dict[str, int] = {
     "front_left":  0x08,
@@ -105,6 +108,10 @@ class LegState:
     wheel_speed: int = 0       # 0~100
     # Arduino 수신 상태
     motor: MotorState = field(default_factory=MotorState)
+    # 딜레이 추적
+    cmd_time:  Optional[float]     = None                        # 명령 전송 시각 (monotonic)
+    cmd_steps: Optional[List[int]] = None                        # 전송한 목표 steps [m1, m2, m3]
+    delay_log: List[float]         = field(default_factory=list) # 도달 지연 샘플 (ms)
 
 
 # ──────────────────────────────────────────────
@@ -178,6 +185,8 @@ class RobotNode:
 
         # 콜백: on_update(leg_name: str, state: LegState)
         self.on_update: Optional[Callable[[str, LegState], None]] = None
+        # 콜백: on_delay_exceeded(leg_name: str, delay_ms: float)
+        self.on_delay_exceeded: Optional[Callable[[str, float], None]] = None
 
     # ────────────────────────────────
     # 시작 / 종료
@@ -297,6 +306,7 @@ class RobotNode:
             t0 = time.monotonic()
             for leg in LEG_ADDR:
                 self._receive(leg)
+            self._check_delay()
             elapsed = time.monotonic() - t0
             sleep_t = self.poll_interval_s - elapsed
             if sleep_t > 0:
@@ -347,6 +357,10 @@ class RobotNode:
         self._send_servo(leg, 1, m1)
         self._send_servo(leg, 2, m2)
         self._send_servo(leg, 3, m3)
+        with self._lock:
+            state = self._legs[leg]
+            state.cmd_time  = time.monotonic()
+            state.cmd_steps = [degree_to_step(m1), degree_to_step(m2), degree_to_step(m3)]
 
     # ────────────────────────────────
     # 내부: I2C 송신 (바퀴)
@@ -362,6 +376,62 @@ class RobotNode:
             log.error("[%s] I2C 바퀴 송신 오류: %s", leg, e)
             return
         self._receive(leg)
+
+    # ────────────────────────────────
+    # 내부: 딜레이 감지
+    # ────────────────────────────────
+    def _check_delay(self):
+        '''모터 도달 지연 측정. 도달 시 기록, DELAY_WARN_MS 초과 시 콜백.'''
+        now = time.monotonic()
+        exceeded = []
+
+        with self._lock:
+            for leg, state in self._legs.items():
+                if state.cmd_time is None or state.cmd_steps is None:
+                    continue
+                reached = all(
+                    abs(state.motor.position[i] - state.cmd_steps[i]) <= STEP_TOLERANCE
+                    for i in range(3)
+                )
+                elapsed_ms = (now - state.cmd_time) * 1000.0
+                if reached:
+                    state.delay_log.append(elapsed_ms)
+                    if len(state.delay_log) > DELAY_LOG_MAX:
+                        state.delay_log.pop(0)
+                    state.cmd_time  = None
+                    state.cmd_steps = None
+                elif elapsed_ms > DELAY_WARN_MS:
+                    log.warning("[%s] 모터 딜레이 %.1fms 초과 → 안전 정지", leg, elapsed_ms)
+                    state.cmd_time  = None
+                    state.cmd_steps = None
+                    exceeded.append((leg, elapsed_ms))
+
+        for leg, elapsed_ms in exceeded:
+            if self.on_delay_exceeded:
+                try:
+                    self.on_delay_exceeded(leg, elapsed_ms)
+                except Exception:
+                    pass
+
+    # ────────────────────────────────
+    # 딜레이 통계 조회
+    # ────────────────────────────────
+    def get_delay_stats(self) -> Dict[str, dict]:
+        '''다리별 딜레이 통계 반환.'''
+        with self._lock:
+            result = {}
+            for leg, state in self._legs.items():
+                log_copy = list(state.delay_log)
+                if log_copy:
+                    result[leg] = {
+                        "count":   len(log_copy),
+                        "avg_ms":  round(sum(log_copy) / len(log_copy), 1),
+                        "max_ms":  round(max(log_copy), 1),
+                        "last_ms": round(log_copy[-1], 1),
+                    }
+                else:
+                    result[leg] = {"count": 0}
+        return result
 
     # ────────────────────────────────
     # 내부: 유효성 검사

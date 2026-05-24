@@ -34,7 +34,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Imu
 
 from robot_node import RobotNode
-from gait_controller import GaitController
+from gait_controller import GaitController, LEG_CONFIG, NEUTRAL_X, NEUTRAL_Y, NEUTRAL_Z
 
 logging.basicConfig(
     level=logging.INFO,
@@ -102,7 +102,7 @@ class ImuSubscriber(Node):
 # ──────────────────────────────────────────────
 # TCP 클라이언트 핸들러
 # ──────────────────────────────────────────────
-def handle_client(conn, addr, gait, imu_node):
+def handle_client(conn, addr, gait, imu_node, node, halt_event):
     log.info("클라이언트 연결: %s", addr)
     buf = ""
     try:
@@ -126,12 +126,16 @@ def handle_client(conn, addr, gait, imu_node):
                 cmd = msg.get("cmd", "")
 
                 if cmd == "move":
+                    if halt_event.is_set():
+                        conn.sendall(b'{"ok":false,"error":"halted: motor delay exceeded, send stop to resume"}\n')
+                        continue
                     angle     = float(msg.get("angle", 0.0))
                     magnitude = float(msg.get("magnitude", 0.0))
                     gait.set_command(angle=angle, magnitude=magnitude)
                     conn.sendall(b'{"ok":true}\n')
 
                 elif cmd == "stop":
+                    halt_event.clear()
                     gait.set_command(angle=0.0, magnitude=0.0)
                     conn.sendall(b'{"ok":true}\n')
 
@@ -139,6 +143,7 @@ def handle_client(conn, addr, gait, imu_node):
                     roll, pitch, yaw = imu_node.euler_deg
                     resp = json.dumps({
                         "ok": True,
+                        "halted": halt_event.is_set(),
                         "imu": {
                             "roll":  round(roll,  2),
                             "pitch": round(pitch, 2),
@@ -147,7 +152,8 @@ def handle_client(conn, addr, gait, imu_node):
                         "gait": {
                             "magnitude": round(gait._filt_magnitude, 3),
                             "angle_deg": round(math.degrees(gait._filt_angle), 1),
-                        }
+                        },
+                        "delay": node.get_delay_stats(),
                     }) + "\n"
                     conn.sendall(resp.encode())
 
@@ -185,6 +191,19 @@ def main():
     node = RobotNode(poll_interval_s=0.05)
     gait = GaitController(node)
 
+    # 안전 정지 이벤트
+    halt_event = threading.Event()
+
+    def _on_delay_exceeded(leg_name, elapsed_ms):
+        log.warning("안전 정지 트리거: %s %.1fms 지연", leg_name, elapsed_ms)
+        halt_event.set()
+        gait.set_command(angle=0.0, magnitude=0.0)
+        for lg, cfg in LEG_CONFIG.items():
+            xs = 1.0 if cfg["right"] else -1.0
+            node.set_target(lg, xs * NEUTRAL_X, NEUTRAL_Y, NEUTRAL_Z)
+
+    node.on_delay_exceeded = _on_delay_exceeded
+
     node.start()
     gait.start()
 
@@ -209,7 +228,7 @@ def main():
             conn, addr = srv.accept()
             t = threading.Thread(
                 target=handle_client,
-                args=(conn, addr, gait, imu_node),
+                args=(conn, addr, gait, imu_node, node, halt_event),
                 daemon=True,
             )
             t.start()

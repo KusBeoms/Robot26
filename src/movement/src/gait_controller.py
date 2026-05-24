@@ -185,7 +185,7 @@ class GaitController:
             mag_scaled = self._filt_magnitude * self.step_length
 
             # 전후 stride: z 투영
-            step_z = -mag_scaled * math.cos(self._filt_angle)
+            step_z = mag_scaled * math.cos(self._filt_angle)
 
             # 좌우 이동 보조: 앞다리/뒷다리 차동 stride
             # angle=90deg(오른쪽): 앞다리 +z, 뒷다리 -z -> 오른쪽 선회 유사
@@ -193,6 +193,9 @@ class GaitController:
 
             for leg, cfg in LEG_CONFIG.items():
                 xs = 1.0 if cfg["right"] else -1.0
+
+                # pitch 차동 보정: 앞다리 +, 뒷다리 - (앞으로 기울면 앞다리 더 뻗고 뒷다리 줄임)
+                imu_corr = dy_imu if cfg["front"] else -dy_imu
 
                 if moving:
                     self._phase[leg] = (
@@ -203,11 +206,11 @@ class GaitController:
                     dy_swing, dz = foot_trajectory(self._phase[leg], sz, self.step_height)
 
                     target_x = xs * NEUTRAL_X
-                    target_y = NEUTRAL_Y - dy_swing + dy_imu
+                    target_y = NEUTRAL_Y - dy_swing + imu_corr
                     target_z = NEUTRAL_Z + dz
                 else:
                     target_x = xs * NEUTRAL_X
-                    target_y = NEUTRAL_Y + dy_imu
+                    target_y = NEUTRAL_Y + imu_corr
                     target_z = NEUTRAL_Z
 
                 self.node.set_target(leg, target_x, target_y, target_z)

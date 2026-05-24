@@ -248,36 +248,6 @@ def inverse_kinematics(target_x, target_y, target_z, right_leg=True):
 
 
 # ──────────────────────────────────────────────
-# 편의 함수
-# ──────────────────────────────────────────────
-def move_leg_to(target_x, target_y, target_z, right_leg=True,
-                send_memory=None, communicate_fn=None):
-    '''
-    목표 좌표로 다리를 이동. send_memory, communicate_fn 전달 시 자동 전송.
-    오른쪽 다리: 모터 ID 1,2,3,4  /  왼쪽 다리: 모터 ID 5,6,7,8
-    '''
-    result = inverse_kinematics(target_x, target_y, target_z, right_leg)
-
-    if not result["valid"]:
-        print(f"[IK 경고] {result.get('error', '계산 실패')}")
-
-    print(f"목표: ({target_x:.1f}, {target_y:.1f}, {target_z:.1f}) mm")
-    print(f"{'오른쪽' if right_leg else '왼쪽'} 다리 → "
-          f"m1={result['m1']}°  m2={result['m2']}°  m3={result['m3']}°")
-
-    if send_memory is not None and result["valid"]:
-        from __main__ import set_servo_deg
-        offset = 0 if right_leg else 4
-        set_servo_deg(1 + offset, result["m1"])
-        set_servo_deg(2 + offset, result["m2"])
-        set_servo_deg(3 + offset, result["m3"])
-        if communicate_fn:
-            communicate_fn()
-
-    return result
-
-
-# ──────────────────────────────────────────────
 # 테스트
 # ──────────────────────────────────────────────
 if __name__ == "__main__":
