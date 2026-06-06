@@ -47,7 +47,7 @@ log = logging.getLogger("robot_node")
 # ──────────────────────────────────────────────
 # 상수
 # ──────────────────────────────────────────────
-I2C_BUS        = 1        # 라즈베리파이 기본 I2C 버스
+I2C_BUS        = 1        # 다리 Arduino I2C 버스 (i2c-1 / MPU6050도 i2c-1)
 RESPONSE_LEN   = 20       # requestEvent() 응답 바이트 수
 STEP_TOLERANCE = 15       # 도달 판정 허용 오차 (steps, ≈3.6°)
 DELAY_WARN_MS  = 500.0    # 이 초과 시 안전 정지 트리거
@@ -118,12 +118,16 @@ class LegState:
 # Mock I2C (smbus2 없을 때 테스트용)
 # ──────────────────────────────────────────────
 class _MockBus:
-    def write_i2c_block_data(self, addr, reg, buf):
+    def read_byte(self, addr):
+        log.debug(f"[MockI2C] ping addr=0x{addr:02X}")
+        return 0
+
+    def i2c_write(self, addr, buf):
         log.debug(f"[MockI2C] TX addr=0x{addr:02X} buf={buf}")
 
-    def read_i2c_block_data(self, addr, reg, length):
+    def i2c_read(self, addr, length):
         log.debug(f"[MockI2C] RX addr=0x{addr:02X} len={length}")
-        return [0] * length
+        return bytes(length)
 
     def close(self):
         pass
@@ -174,6 +178,12 @@ class RobotNode:
             self._bus = _MockBus()
         else:
             self._bus = bus if bus is not None else smbus2.SMBus(I2C_BUS)
+
+        # 응답하는 다리만 사용 (시작 시 ping으로 자동 감지)
+        self.active_legs: set = self._detect_active_legs()
+        dead = set(LEG_ADDR) - self.active_legs
+        if dead:
+            log.warning("응답 없는 다리 (제외됨): %s", dead)
 
         # 다리 상태
         self._legs: Dict[str, LegState] = {name: LegState() for name in LEG_ADDR}
@@ -299,12 +309,29 @@ class RobotNode:
                 print(f"  모터: {s.motor}")
 
     # ────────────────────────────────
+    # 내부: 활성 다리 감지
+    # ────────────────────────────────
+    def _detect_active_legs(self) -> set:
+        """I2C ping으로 응답하는 다리만 반환. MockBus면 전체 반환."""
+        if isinstance(self._bus, _MockBus):
+            return set(LEG_ADDR.keys())
+        active = set()
+        for leg, addr in LEG_ADDR.items():
+            try:
+                self._bus.read_byte(addr)
+                active.add(leg)
+                log.info("[%s] 0x%02X 응답 확인", leg, addr)
+            except Exception:
+                log.warning("[%s] 0x%02X 응답 없음 → 제외", leg, addr)
+        return active
+
+    # ────────────────────────────────
     # 내부: 폴링 루프
     # ────────────────────────────────
     def _poll_loop(self):
         while self._running:
             t0 = time.monotonic()
-            for leg in LEG_ADDR:
+            for leg in self.active_legs:
                 self._receive(leg)
             self._check_delay()
             elapsed = time.monotonic() - t0
@@ -318,18 +345,28 @@ class RobotNode:
     def _receive(self, leg: str):
         addr = LEG_ADDR[leg]
         try:
-            raw = self._bus.read_i2c_block_data(addr, 0, RESPONSE_LEN)
+            if isinstance(self._bus, _MockBus):
+                raw = self._bus.i2c_read(addr, RESPONSE_LEN)
+            else:
+                # read_i2c_block_data는 register byte를 먼저 보내므로 사용 금지.
+                # i2c_rdwr + i2c_msg.read → register byte 없이 순수 I2C read.
+                msg = smbus2.i2c_msg.read(addr, RESPONSE_LEN)
+                self._bus.i2c_rdwr(msg)
+                raw = bytes(msg)
         except Exception as e:
             log.error("[%s] I2C 수신 오류: %s", leg, e)
             return
 
-        b = bytes(raw)
+        new_pos = list(struct.unpack_from('<4h', raw, 0))
         with self._lock:
             m = self._legs[leg].motor
-            m.position    = list(struct.unpack_from('<4h', b, 0))
-            m.current     = struct.unpack_from('<H',  b, 8)[0]
-            m.accel_debug = struct.unpack_from('<h',  b, 10)[0]
-            m.next_pos    = list(struct.unpack_from('<4h', b, 12))
+            # -1(0xFFFF) = Arduino 내부 서보 UART 실패 → 이전 값 유지
+            for i in range(4):
+                if new_pos[i] != -1:
+                    m.position[i] = new_pos[i]
+            m.current     = struct.unpack_from('<H',  raw, 8)[0]
+            m.accel_debug = struct.unpack_from('<h',  raw, 10)[0]
+            m.next_pos    = list(struct.unpack_from('<4h', raw, 12))
             state_copy    = self._legs[leg]
 
         if self.on_update:
@@ -346,14 +383,23 @@ class RobotNode:
         step = degree_to_step(degree)
         buf  = [motor_id, 0, step & 0xFF, (step >> 8) & 0xFF]
         try:
-            self._bus.write_i2c_block_data(addr, 0, buf)
+            if isinstance(self._bus, _MockBus):
+                self._bus.i2c_write(addr, buf)
+            else:
+                # write_i2c_block_data(addr, reg, data)는 [reg]+data를 전송해
+                # Arduino가 reg=0을 motor id로 읽어 무효 처리함 → 사용 금지.
+                # i2c_rdwr + i2c_msg.write → register byte 없이 정확히 4바이트만 전송.
+                msg = smbus2.i2c_msg.write(addr, buf)
+                self._bus.i2c_rdwr(msg)
         except Exception as e:
             log.error("[%s] I2C 서보 송신 오류 (id=%d): %s", leg, motor_id, e)
             return
         self._receive(leg)
 
     def _send_leg(self, leg: str, m1: float, m2: float, m3: float):
-        '''1~3번 모터 순차 송신.'''
+        '''1~3번 모터 순차 송신. 응답 없는 다리는 무시.'''
+        if leg not in self.active_legs:
+            return
         self._send_servo(leg, 1, m1)
         self._send_servo(leg, 2, m2)
         self._send_servo(leg, 3, m3)
@@ -366,12 +412,16 @@ class RobotNode:
     # 내부: I2C 송신 (바퀴)
     # ────────────────────────────────
     def _send_wheel(self, leg: str, rotate_dir: bool, speed: int):
-        addr      = LEG_ADDR[leg]
-        dir_byte  = 0 if not rotate_dir else 1
-        spd_byte  = max(0, min(100, speed))
-        buf       = [4, 1, dir_byte, spd_byte]
+        addr     = LEG_ADDR[leg]
+        dir_byte = 0 if not rotate_dir else 1
+        spd_byte = max(0, min(100, speed))
+        buf      = [4, 1, dir_byte, spd_byte]
         try:
-            self._bus.write_i2c_block_data(addr, 0, buf)
+            if isinstance(self._bus, _MockBus):
+                self._bus.i2c_write(addr, buf)
+            else:
+                msg = smbus2.i2c_msg.write(addr, buf)
+                self._bus.i2c_rdwr(msg)
         except Exception as e:
             log.error("[%s] I2C 바퀴 송신 오류: %s", leg, e)
             return
