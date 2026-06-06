@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 접힌 자세(0°,0°,0°) → 펴진 자세 → 접힌 자세 테스트.
-앞다리: m1_real=-10°, m2=30°, m3=75° / 뒷다리: m1_real=-10°, m2=35°, m3=80°
+앞다리: m1_input=-10°, m2=30°, m3=80° / 뒷다리: m1_input=-10°, m2=25°, m3=80°
 IK 없이 직접 각도 지정. 응답 없는 다리는 자동 제외.
 
 사용법:
@@ -18,12 +18,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from robot_node import RobotNode, LEG_ADDR
 
-# m1 real = input - 15
-# 앞다리: m1_real=-10° → input=5°,  m2=30°, m3=75°
-# 뒷다리: m1_real=-10° → input=5°,  m2=35°, m3=80°
-FOLDED_ANGLES    = (0.0,  0.0,  0.0)
-FRONT_EXTENDED   = (5.0, 30.0, 75.0)
-REAR_EXTENDED    = (5.0, 35.0, 80.0)
+FOLDED_ANGLES    = (0.0,   0.0,  0.0)
+FRONT_EXTENDED   = (-10.0, 30.0, 80.0)
+REAR_EXTENDED    = (-10.0, 30.0, 100.0)
 FRONT_LEGS       = {"front_left", "front_right"}
 
 log = logging.getLogger("extend_legs")
@@ -94,8 +91,8 @@ def main():
     if dead:
         print(f"제외된 다리: {sorted(dead)}")
 
-    print(f"\n앞다리 목표: m1_input=5°(real=-10°)  m2=30°  m3=75°")
-    print(f"뒷다리 목표: m1_input=5°(real=-10°)  m2=35°  m3=80°")
+    print(f"\n앞다리 목표: m1=-10°  m2=30°  m3=80°")
+    print(f"뒷다리 목표: m1=-10°  m2=25°  m3=80°")
 
     folded   = {leg: FOLDED_ANGLES for leg in active}
     extended = {
@@ -112,7 +109,7 @@ def main():
         # 2. 완전히 펴기
         interpolate(node, folded, extended,
                     steps=args.steps, step_delay=step_delay,
-                    label="[2] 다리 펴기 (앞: -10°/30°/75°, 뒤: -10°/35°/80°)")
+                    label="[2] 다리 펴기 (앞: -10°/30°/80°, 뒤: -10°/25°/80°)")
 
         print(f"펴진 자세 유지 {args.hold:.1f}초...")
         time.sleep(args.hold)
